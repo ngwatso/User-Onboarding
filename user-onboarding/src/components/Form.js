@@ -78,6 +78,7 @@ export default function Form() {
 
 		axios.post("https://reqres.in/api/users", formState)
 			.then((res) => {
+				console.log("RESPONSE", res);
 				setPost(res.data);
 				setServerError(null);
 				setFormState({
@@ -110,7 +111,7 @@ export default function Form() {
 		});
 	}, [formState]);
 
-	console.log("formState", formState);
+	// console.log("formState", formState);
 
 	// TODO set up jsx
 
