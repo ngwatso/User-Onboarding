@@ -17,8 +17,24 @@ export default function Form() {
 	const [serverError, setServerError] = useState("");
 
 	// TODO submittal state
+
+	const [buttonIsDisabled, setButtonIsDisabled] = useState(true);
+
+	// TODO set up password state
 	// TODO error state
+
+	const [errors, setErrors] = useState({
+		name: "",
+		email: "",
+		password: "",
+		termsOfService: "",
+	});
+
 	// TODO response from API
+
+	const [post, setPost] = useState([]);
+
+	// TODO onChange function
 	// TODO set up jsx
 	return (
 		<form>
@@ -66,19 +82,21 @@ export default function Form() {
 				) : null} */}
 			</label>
 
-			<label htmlFor="termsOfService">
-				I Accept the Terms of Service
-				<input
-					id="termsOfService"
-					name="termsOfService"
-					type="checkbox"
-					checked=""
-					onChange=""
-				/>
-				{/* {errors.termsOfService.length > 0 ? (
+			<div className="termsOfService">
+				<label htmlFor="termsOfService">
+					I Accept the Terms of Service
+					<input
+						id="termsOfService"
+						name="termsOfService"
+						type="checkbox"
+						checked=""
+						onChange=""
+					/>
+					{/* {errors.termsOfService.length > 0 ? (
 					<p className="error">{errors.termsOfService}</p>
 				) : null} */}
-			</label>
+				</label>
+			</div>
 		</form>
 	);
 }
