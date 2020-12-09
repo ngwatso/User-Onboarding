@@ -34,8 +34,26 @@ export default function Form() {
 
 	const [post, setPost] = useState([]);
 
+	// TODO inline validation
 	// TODO onChange function
+
+	const inputChange = (e) => {
+		e.persist();
+
+		const newFormState = {
+			...formState,
+			[e.target.name]:
+				e.target.type === "checkbox"
+					? e.target.checked
+					: e.target.value,
+		};
+	};
+
+	// TODO onSubmit function
+	// TODO post request
+	// TODO add schema for validation
 	// TODO set up jsx
+
 	return (
 		<form>
 			{/* {serverError && <p className="error">{serverError}</p>} */}
@@ -46,8 +64,8 @@ export default function Form() {
 					id="name"
 					type="text"
 					name="name"
-					value=""
-					onChange=""
+					value={formState.name}
+					onChange={iputChange}
 				/>
 				{/* {errors.name.length > 0 ? (
 					<p className="error">{errors.name}</p>
@@ -55,13 +73,13 @@ export default function Form() {
 			</label>
 
 			<label htmlFor="email">
-				email
+				Email
 				<input
 					id="email"
 					type="text"
 					name="email"
-					value=""
-					onChange=""
+					value={formState.email}
+					onChange={inputChange}
 				/>
 				{/* {errors.email.length > 0 ? (
 					<p className="error">{errors.email}</p>
@@ -69,13 +87,13 @@ export default function Form() {
 			</label>
 
 			<label htmlFor="password">
-				password
+				Password
 				<input
 					id="password"
 					type="text"
 					name="password"
-					value=""
-					onChange=""
+					value={formState.password}
+					onChange={inputChange}
 				/>
 				{/* {errors.password.length > 0 ? (
 					<p className="error">{errors.password}</p>
@@ -89,14 +107,17 @@ export default function Form() {
 						id="termsOfService"
 						name="termsOfService"
 						type="checkbox"
-						checked=""
-						onChange=""
+						checked={formState.termsOfService}
+						onChange={inputChange}
 					/>
 					{/* {errors.termsOfService.length > 0 ? (
 					<p className="error">{errors.termsOfService}</p>
 				) : null} */}
 				</label>
 			</div>
+			<button type="submit" disabled={buttonIsDisabled}>
+				submit
+			</button>
 		</form>
 	);
 }
