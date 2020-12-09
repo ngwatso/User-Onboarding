@@ -35,6 +35,23 @@ export default function Form() {
 	const [post, setPost] = useState([]);
 
 	// TODO inline validation
+
+	const validateChange = (e) => {
+		yup.reach(formSchema, e.target.name)
+			.validate(
+				e.target.type === "checkbox"
+					? e.target.checked
+					: e.target.value
+			)
+			.then((valid) => {
+				setErrors({ ...errors, [e.target.name]: "" });
+			})
+			.catch((err) => {
+				console.log("ERROR", err);
+				setErrors({ ...errors, [e.target.name]: err.errors[0] });
+			});
+	};
+
 	// TODO onChange function
 
 	const inputChange = (e) => {
@@ -47,16 +64,59 @@ export default function Form() {
 					? e.target.checked
 					: e.target.value,
 		};
+
+		validateChange(e);
+		setFormState(newFormState);
 	};
 
 	// TODO onSubmit function
-	// TODO post request
+
+	const formSubmit = (e) => {
+		e.preventDefault();
+
+		// TODO post request
+
+		axios.post("https://reqres.in/api/users", formState)
+			.then((res) => {
+				setPost(res.data);
+				setServerError(null);
+				setFormState({
+					name: "",
+					email: "",
+					password: "",
+					termsOfService: false,
+				});
+			})
+			.catch((err) => {
+				setServerError("Oops! Something went wrong!");
+			});
+	};
+
 	// TODO add schema for validation
+
+	const formSchema = yup.object().shape({
+		name: yup.string().required("Name is required."),
+		email: yup.string().email(),
+		password: yup.string().required("Password is required."),
+		termsOfService: yup.boolean().oneOf([true]),
+	});
+
+	// TODO useEffect
+
+	useEffect(() => {
+		formSchema.isValid(formState).then((valid) => {
+			console.log("Is form valid?", valid);
+			setButtonIsDisabled(!valid);
+		});
+	}, [formState]);
+
+	console.log("formState", formState);
+
 	// TODO set up jsx
 
 	return (
-		<form>
-			{/* {serverError && <p className="error">{serverError}</p>} */}
+		<form onSubmit={formSubmit}>
+			{serverError && <p className="error">{serverError}</p>}
 
 			<label htmlFor="name">
 				Name
@@ -65,11 +125,11 @@ export default function Form() {
 					type="text"
 					name="name"
 					value={formState.name}
-					onChange={iputChange}
+					onChange={inputChange}
 				/>
-				{/* {errors.name.length > 0 ? (
+				{errors.name.length > 0 ? (
 					<p className="error">{errors.name}</p>
-				) : null} */}
+				) : null}
 			</label>
 
 			<label htmlFor="email">
@@ -81,9 +141,9 @@ export default function Form() {
 					value={formState.email}
 					onChange={inputChange}
 				/>
-				{/* {errors.email.length > 0 ? (
+				{errors.email.length > 0 ? (
 					<p className="error">{errors.email}</p>
-				) : null} */}
+				) : null}
 			</label>
 
 			<label htmlFor="password">
@@ -95,9 +155,9 @@ export default function Form() {
 					value={formState.password}
 					onChange={inputChange}
 				/>
-				{/* {errors.password.length > 0 ? (
+				{errors.password.length > 0 ? (
 					<p className="error">{errors.password}</p>
-				) : null} */}
+				) : null}
 			</label>
 
 			<div className="termsOfService">
@@ -110,14 +170,15 @@ export default function Form() {
 						checked={formState.termsOfService}
 						onChange={inputChange}
 					/>
-					{/* {errors.termsOfService.length > 0 ? (
-					<p className="error">{errors.termsOfService}</p>
-				) : null} */}
+					{errors.termsOfService.length > 0 ? (
+						<p className="error">{errors.termsOfService}</p>
+					) : null}
 				</label>
 			</div>
 			<button type="submit" disabled={buttonIsDisabled}>
 				submit
 			</button>
+			<pre>{JSON.stringify(post, null, 2)}</pre>
 		</form>
 	);
 }
