@@ -96,9 +96,9 @@ export default function Form() {
 	// TODO add schema for validation
 
 	const formSchema = yup.object().shape({
-		name: yup.string().required("Name is required."),
-		email: yup.string().email(),
-		password: yup.string().required("Password is required."),
+		name: yup.string().required("Name is required"),
+		email: yup.string().email().required("Email is required"),
+		password: yup.string().required("Password is required"),
 		termsOfService: yup.boolean().oneOf([true]),
 	});
 
@@ -129,7 +129,9 @@ export default function Form() {
 					onChange={inputChange}
 				/>
 				{errors.name.length > 0 ? (
-					<p className="error">{errors.name}</p>
+					<p data-cy="err1" className="error">
+						{errors.name}
+					</p>
 				) : null}
 			</label>
 
@@ -143,7 +145,9 @@ export default function Form() {
 					onChange={inputChange}
 				/>
 				{errors.email.length > 0 ? (
-					<p className="error">{errors.email}</p>
+					<p data-cy="err2" className="error">
+						{errors.email}
+					</p>
 				) : null}
 			</label>
 
@@ -157,7 +161,9 @@ export default function Form() {
 					onChange={inputChange}
 				/>
 				{errors.password.length > 0 ? (
-					<p className="error">{errors.password}</p>
+					<p data-cy="err3" className="error">
+						{errors.password}
+					</p>
 				) : null}
 			</label>
 
@@ -172,7 +178,9 @@ export default function Form() {
 						onChange={inputChange}
 					/>
 					{errors.termsOfService.length > 0 ? (
-						<p className="error">{errors.termsOfService}</p>
+						<p data-cy="err4" className="error">
+							{errors.termsOfService}
+						</p>
 					) : null}
 				</label>
 			</div>
